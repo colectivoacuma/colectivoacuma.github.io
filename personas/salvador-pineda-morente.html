@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salvador Pineda Morente - Colectivo ACUMA</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f9fa; }
+        .profile-container { max-width: 600px; margin: auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+        .profile-img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #0288d1; display: block; margin: 0 auto 24px auto; }
+        .dias-acreditado-box { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
+        .dias-acreditado-num { font-size: 3.5em; font-weight: bold; color: #0288d1; line-height: 1; }
+        .dias-acreditado-label { font-size: 1.1em; color: #0288d1; font-weight: bold; letter-spacing: 1px; margin-top: 0; line-height: 1; }
+        .profile-info { font-size: 1.1em; color: #222; }
+        .profile-info strong { color: #0288d1; }
+        .profile-link a { color: #0288d1; text-decoration: none; }
+        .profile-link a:hover { text-decoration: underline; }
+    </style>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var el = document.querySelector('.dias-acreditado-num');
+        if (el) {
+            var fecha = el.getAttribute('data-fecha');
+            if (fecha) {
+                var fechaAcreditacion = new Date(fecha);
+                var hoy = new Date();
+                fechaAcreditacion.setHours(0,0,0,0);
+                hoy.setHours(0,0,0,0);
+                var diff = Math.max(0, Math.floor((hoy - fechaAcreditacion) / (1000*60*60*24)));
+                el.textContent = diff;
+            }
+        }
+    });
+    </script>
+</head>
+<body>
+    <div class="profile-container">
+        <img class="profile-img" src="../id/salva.jpeg" alt="Foto Salvador Pineda Morente">
+        <div class="dias-acreditado-box">
+            <span class="dias-acreditado-num" data-fecha="2024-04-17">0</span>
+            <span class="dias-acreditado-label">DÍAS ACREDITADO</span>
+        </div>
+        <div class="profile-info">
+            <p><strong>Nombre:</strong> Salvador Pineda Morente</p>
+            <p><strong>Departamento:</strong> Ingeniería Eléctrica</p>
+            <p><strong>Fecha de acreditación:</strong> 17/04/2024</p>
+            <p><strong>Docencia en:</strong> Ingeniería Industrial</p>
+            <p><strong>Investigación en:</strong> Sistemas Eléctricos y Optimización</p>
+            <p class="profile-link"><strong>Web:</strong> <a href="https://salvapineda.github.io" target="_blank">salvapineda.github.io</a></p>
+        </div>
+    </div>
+</body>
+</html>
