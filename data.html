@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Datos - Colectivo ACUMA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 20px;
+            color: #333;
+        }
+        header {
+            background: #e0f7fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #0288d1;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #e8491d;
+        }
+        section {
+            margin: 30px 0;
+        }
+        section h2 {
+            color: #0288d1;
+            border-bottom: 2px solid #0288d1;
+            padding-bottom: 10px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background: #f4f4f4;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #e0f7fa;
+            border: 2px solid #0288d1;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            background: #b3e5fc;
+            box-shadow: 0 4px 8px rgba(2, 136, 209, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #0288d1;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        .stat-subtext {
+            font-size: 0.75em;
+            color: #0288d1;
+            margin-top: 8px;
+        }
+        
+        .info-section {
+            background: #f9f9f9;
+            border-left: 4px solid #0288d1;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 4px;
+        }
+        
+        .info-section h3 {
+            color: #0288d1;
+            margin-top: 0;
+        }
+        
+        .info-item {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+        
+        .info-item:not(:last-child) {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-label {
+            color: #0288d1;
+            font-weight: bold;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .highlight {
+            color: #e8491d;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            .stat-value {
+                font-size: 1.8em;
+            }
+            
+            .info-item {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>COLECTIVO DE PROFESORADO ACREDITADO A CATEDRÁTICOS DE LA UMA</h1>
+        <img src="colectivoacuma.png" alt="Luchando por una educación justa" style="max-width: 50%; height: auto; object-fit: cover; object-position: center top;">
+    </header>
+
+    <nav>
+        <a href="index.html#quienes-somos">Quiénes Somos</a>
+        <a href="index.html#reivindicaciones">Reivindicaciones</a>
+        <a href="index.html#noticias">Noticias</a>
+        <a href="index.html#foto-noticias">Galería</a>
+        <a href="index.html#descargas">Descargas</a>
+        <a href="conocenos.html">Conócenos</a>
+        <a href="data.html">Análisis</a>
+        <a href="index.html#contacto">Contacto</a>
+    </nav>
+
+    <section>
+        <h2>Análisis de Tiempos de Toma de Posesión</h2>
+        <p>
+            Estadísticas sobre el tiempo transcurrido entre la acreditación y la toma de posesión 
+            de los profesores del colectivo ACUMA.
+        </p>
+
+        <div id="loading" style="text-align:center; color:#0288d1; padding: 20px;">Cargando datos...</div>
+
+        <div id="stats-content" style="display:none;">
+            <h3 style="color: #0288d1; margin-top: 30px; margin-bottom: 15px;">Con Toma de Posesión</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Número de Personas</div>
+                    <div class="stat-value" id="stat-con-toma-num"></div>
+                    <div class="stat-subtext" id="stat-con-toma-pct"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mínimo</div>
+                    <div class="stat-value" id="stat-con-min"></div>
+                    <div class="stat-subtext" id="stat-con-min-sub"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Promedio</div>
+                    <div class="stat-value" id="stat-con-avg"></div>
+                    <div class="stat-subtext" id="stat-con-avg-sub"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Máximo</div>
+                    <div class="stat-value" id="stat-con-max"></div>
+                    <div class="stat-subtext" id="stat-con-max-sub"></div>
+                </div>
+            </div>
+
+            <h3 style="color: #0288d1; margin-top: 30px; margin-bottom: 15px;">Pendiente de Toma de Posesión</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Número de Personas</div>
+                    <div class="stat-value" id="stat-sin-toma-num"></div>
+                    <div class="stat-subtext" id="stat-sin-toma-pct"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mínimo</div>
+                    <div class="stat-value" id="stat-sin-min"></div>
+                    <div class="stat-subtext" id="stat-sin-min-sub"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Promedio</div>
+                    <div class="stat-value" id="stat-sin-avg"></div>
+                    <div class="stat-subtext" id="stat-sin-avg-sub"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Máximo</div>
+                    <div class="stat-value" id="stat-sin-max"></div>
+                    <div class="stat-subtext" id="stat-sin-max-sub"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section" id="detalle-section" style="display:none;">
+        <h3>📋 Información Detallada - Con Toma de Posesión</h3>
+        <div class="info-item">
+            <span class="info-label">Número de Personas:</span>
+            <span class="info-value" id="info-con-num"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Porcentaje:</span>
+            <span class="info-value"><span class="highlight" id="info-con-pct"></span></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Tiempo Mínimo:</span>
+            <span class="info-value" id="info-con-min"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Tiempo Promedio:</span>
+            <span class="info-value" id="info-con-avg"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Tiempo Máximo:</span>
+            <span class="info-value" id="info-con-max"></span>
+        </div>
+    </section>
+
+    <section class="info-section" id="detalle-sin-section" style="display:none;">
+        <h3>📋 Información Detallada - Pendiente de Toma de Posesión</h3>
+        <div class="info-item">
+            <span class="info-label">Número de Personas:</span>
+            <span class="info-value" id="info-sin-num"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Porcentaje:</span>
+            <span class="info-value"><span class="highlight" id="info-sin-pct"></span></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Tiempo Mínimo Acreditado:</span>
+            <span class="info-value" id="info-sin-min"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Tiempo Promedio Acreditado:</span>
+            <span class="info-value" id="info-sin-avg"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Tiempo Máximo Acreditado:</span>
+            <span class="info-value" id="info-sin-max"></span>
+        </div>
+    </section>
+
+    <script>
+    function parseFecha(str) {
+        // Accepts DD/MM/YYYY or DD-MM-YY
+        str = str.trim();
+        var parts, day, month, year;
+        if (str.includes('/')) {
+            parts = str.split('/');
+            day = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10) - 1;
+            year = parseInt(parts[2], 10);
+        } else if (str.includes('-')) {
+            parts = str.split('-');
+            day = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10) - 1;
+            year = parseInt(parts[2], 10);
+            if (year < 100) year += 2000;
+        } else {
+            return null;
+        }
+        return new Date(year, month, day);
+    }
+
+    function daysToMonths(days) {
+        return (days / 30.4375).toFixed(1);
+    }
+
+    fetch('Fechas.csv')
+        .then(function(r) { return r.text(); })
+        .then(function(text) {
+            // Handle both Unix (\n) and Windows (\r\n) line endings
+            var lines = text.replace(/\r\n/g, '\n').trim().split('\n');
+            var total = 0;
+            var withToma = [];
+            var withoutToma = [];
+            var today = new Date();
+            today.setHours(0,0,0,0);
+            
+            // Skip header
+            for (var i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue; // Skip empty lines
+                var cols = lines[i].split(',');
+                var acred = cols[0] ? cols[0].trim() : '';
+                var toma  = cols[1] ? cols[1].trim() : '';
+                if (!acred) continue;
+                total++;
+                
+                var dA = parseFecha(acred);
+                if (!dA) continue;
+                
+                if (toma) {
+                    var dT = parseFecha(toma);
+                    if (dT) {
+                        var days = Math.round((dT - dA) / (1000 * 60 * 60 * 24));
+                        withToma.push(days);
+                    }
+                } else {
+                    var daysToday = Math.round((today - dA) / (1000 * 60 * 60 * 24));
+                    withoutToma.push(daysToday);
+                }
+            }
+
+            var conCount = withToma.length;
+            var sinCount = withoutToma.length;
+            var pctCon = ((conCount / total) * 100).toFixed(2);
+            var pctSin = ((sinCount / total) * 100).toFixed(2);
+
+            // Stats WITH toma de posesión
+            var conMinVal = Math.min.apply(null, withToma);
+            var conAvg = withToma.reduce(function(a,b){return a+b;},0) / withToma.length;
+            var conMaxVal = Math.max.apply(null, withToma);
+
+            // Stats WITHOUT toma de posesión
+            var sinMinVal = Math.min.apply(null, withoutToma);
+            var sinAvg = withoutToma.reduce(function(a,b){return a+b;},0) / withoutToma.length;
+            var sinMaxVal = Math.max.apply(null, withoutToma);
+
+            // Update WITH cards
+            document.getElementById('stat-con-toma-num').textContent = conCount;
+            document.getElementById('stat-con-toma-pct').textContent = pctCon + '% del total';
+            document.getElementById('stat-con-min').textContent = conMinVal;
+            document.getElementById('stat-con-min-sub').textContent = '≈ ' + daysToMonths(conMinVal) + ' meses';
+            document.getElementById('stat-con-avg').textContent = conAvg.toFixed(1);
+            document.getElementById('stat-con-avg-sub').textContent = '≈ ' + daysToMonths(conAvg) + ' meses';
+            document.getElementById('stat-con-max').textContent = conMaxVal;
+            document.getElementById('stat-con-max-sub').textContent = '≈ ' + daysToMonths(conMaxVal) + ' meses';
+
+            // Update WITHOUT cards
+            document.getElementById('stat-sin-toma-num').textContent = sinCount;
+            document.getElementById('stat-sin-toma-pct').textContent = pctSin + '% del total';
+            document.getElementById('stat-sin-min').textContent = sinMinVal;
+            document.getElementById('stat-sin-min-sub').textContent = '≈ ' + daysToMonths(sinMinVal) + ' meses';
+            document.getElementById('stat-sin-avg').textContent = sinAvg.toFixed(1);
+            document.getElementById('stat-sin-avg-sub').textContent = '≈ ' + daysToMonths(sinAvg) + ' meses';
+            document.getElementById('stat-sin-max').textContent = sinMaxVal;
+            document.getElementById('stat-sin-max-sub').textContent = '≈ ' + daysToMonths(sinMaxVal) + ' meses';
+
+            // Update detail sections - WITH
+            document.getElementById('info-con-num').textContent = conCount + ' personas';
+            document.getElementById('info-con-pct').textContent = pctCon + '%';
+            document.getElementById('info-con-min').textContent = daysToMonths(conMinVal) + ' meses (' + (conMinVal/365).toFixed(2) + ' años)';
+            document.getElementById('info-con-avg').textContent = daysToMonths(conAvg) + ' meses (' + (conAvg/365).toFixed(2) + ' años)';
+            document.getElementById('info-con-max').textContent = daysToMonths(conMaxVal) + ' meses (' + (conMaxVal/365).toFixed(2) + ' años)';
+
+            // Update detail sections - WITHOUT
+            document.getElementById('info-sin-num').textContent = sinCount + ' personas';
+            document.getElementById('info-sin-pct').textContent = pctSin + '%';
+            document.getElementById('info-sin-min').textContent = daysToMonths(sinMinVal) + ' meses (' + (sinMinVal/365).toFixed(2) + ' años)';
+            document.getElementById('info-sin-avg').textContent = daysToMonths(sinAvg) + ' meses (' + (sinAvg/365).toFixed(2) + ' años)';
+            document.getElementById('info-sin-max').textContent = daysToMonths(sinMaxVal) + ' meses (' + (sinMaxVal/365).toFixed(2) + ' años)';
+
+            // Show content, hide loader
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('stats-content').style.display = 'block';
+            document.getElementById('detalle-section').style.display = 'block';
+            document.getElementById('detalle-sin-section').style.display = 'block';
+        })
+        .catch(function(err) {
+            document.getElementById('loading').textContent = 'Error al cargar los datos. ' + err.message;
+        });
+    </script>
+
+    <footer>
+        <p>© 2025 Colectivo ACUMA. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
+
