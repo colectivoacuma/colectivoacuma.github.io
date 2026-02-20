@@ -177,17 +177,20 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Mínimo</div>
-                    <div class="stat-value" id="stat-con-min"></div>
+                    <div class="stat-value" id="stat-con-min-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
                     <div class="stat-subtext" id="stat-con-min-sub"></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Promedio</div>
-                    <div class="stat-value" id="stat-con-avg"></div>
+                    <div class="stat-value" id="stat-con-avg-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
                     <div class="stat-subtext" id="stat-con-avg-sub"></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Máximo</div>
-                    <div class="stat-value" id="stat-con-max"></div>
+                    <div class="stat-value" id="stat-con-max-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
                     <div class="stat-subtext" id="stat-con-max-sub"></div>
                 </div>
             </div>
@@ -201,68 +204,23 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Mínimo</div>
-                    <div class="stat-value" id="stat-sin-min"></div>
+                    <div class="stat-value" id="stat-sin-min-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
                     <div class="stat-subtext" id="stat-sin-min-sub"></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Promedio</div>
-                    <div class="stat-value" id="stat-sin-avg"></div>
+                    <div class="stat-value" id="stat-sin-avg-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
                     <div class="stat-subtext" id="stat-sin-avg-sub"></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Máximo</div>
-                    <div class="stat-value" id="stat-sin-max"></div>
+                    <div class="stat-value" id="stat-sin-max-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
                     <div class="stat-subtext" id="stat-sin-max-sub"></div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section class="info-section" id="detalle-section" style="display:none;">
-        <h3>📋 Información Detallada - Con Toma de Posesión</h3>
-        <div class="info-item">
-            <span class="info-label">Número de Personas:</span>
-            <span class="info-value" id="info-con-num"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Porcentaje:</span>
-            <span class="info-value"><span class="highlight" id="info-con-pct"></span></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Tiempo Mínimo:</span>
-            <span class="info-value" id="info-con-min"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Tiempo Promedio:</span>
-            <span class="info-value" id="info-con-avg"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Tiempo Máximo:</span>
-            <span class="info-value" id="info-con-max"></span>
-        </div>
-    </section>
-
-    <section class="info-section" id="detalle-sin-section" style="display:none;">
-        <h3>📋 Información Detallada - Pendiente de Toma de Posesión</h3>
-        <div class="info-item">
-            <span class="info-label">Número de Personas:</span>
-            <span class="info-value" id="info-sin-num"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Porcentaje:</span>
-            <span class="info-value"><span class="highlight" id="info-sin-pct"></span></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Tiempo Mínimo Acreditado:</span>
-            <span class="info-value" id="info-sin-min"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Tiempo Promedio Acreditado:</span>
-            <span class="info-value" id="info-sin-avg"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Tiempo Máximo Acreditado:</span>
-            <span class="info-value" id="info-sin-max"></span>
         </div>
     </section>
 
@@ -345,42 +303,26 @@
             // Update WITH cards
             document.getElementById('stat-con-toma-num').textContent = conCount;
             document.getElementById('stat-con-toma-pct').textContent = pctCon + '% del total';
-            document.getElementById('stat-con-min').textContent = conMinVal;
-            document.getElementById('stat-con-min-sub').textContent = '≈ ' + daysToMonths(conMinVal) + ' meses';
-            document.getElementById('stat-con-avg').textContent = conAvg.toFixed(1);
-            document.getElementById('stat-con-avg-sub').textContent = '≈ ' + daysToMonths(conAvg) + ' meses';
-            document.getElementById('stat-con-max').textContent = conMaxVal;
-            document.getElementById('stat-con-max-sub').textContent = '≈ ' + daysToMonths(conMaxVal) + ' meses';
+            document.getElementById('stat-con-min-val').textContent = daysToMonths(conMinVal);
+            document.getElementById('stat-con-min-sub').textContent = '(' + (conMinVal/365).toFixed(2) + ' años)';
+            document.getElementById('stat-con-avg-val').textContent = daysToMonths(conAvg);
+            document.getElementById('stat-con-avg-sub').textContent = '(' + (conAvg/365).toFixed(2) + ' años)';
+            document.getElementById('stat-con-max-val').textContent = daysToMonths(conMaxVal);
+            document.getElementById('stat-con-max-sub').textContent = '(' + (conMaxVal/365).toFixed(2) + ' años)';
 
             // Update WITHOUT cards
             document.getElementById('stat-sin-toma-num').textContent = sinCount;
             document.getElementById('stat-sin-toma-pct').textContent = pctSin + '% del total';
-            document.getElementById('stat-sin-min').textContent = sinMinVal;
-            document.getElementById('stat-sin-min-sub').textContent = '≈ ' + daysToMonths(sinMinVal) + ' meses';
-            document.getElementById('stat-sin-avg').textContent = sinAvg.toFixed(1);
-            document.getElementById('stat-sin-avg-sub').textContent = '≈ ' + daysToMonths(sinAvg) + ' meses';
-            document.getElementById('stat-sin-max').textContent = sinMaxVal;
-            document.getElementById('stat-sin-max-sub').textContent = '≈ ' + daysToMonths(sinMaxVal) + ' meses';
-
-            // Update detail sections - WITH
-            document.getElementById('info-con-num').textContent = conCount + ' personas';
-            document.getElementById('info-con-pct').textContent = pctCon + '%';
-            document.getElementById('info-con-min').textContent = daysToMonths(conMinVal) + ' meses (' + (conMinVal/365).toFixed(2) + ' años)';
-            document.getElementById('info-con-avg').textContent = daysToMonths(conAvg) + ' meses (' + (conAvg/365).toFixed(2) + ' años)';
-            document.getElementById('info-con-max').textContent = daysToMonths(conMaxVal) + ' meses (' + (conMaxVal/365).toFixed(2) + ' años)';
-
-            // Update detail sections - WITHOUT
-            document.getElementById('info-sin-num').textContent = sinCount + ' personas';
-            document.getElementById('info-sin-pct').textContent = pctSin + '%';
-            document.getElementById('info-sin-min').textContent = daysToMonths(sinMinVal) + ' meses (' + (sinMinVal/365).toFixed(2) + ' años)';
-            document.getElementById('info-sin-avg').textContent = daysToMonths(sinAvg) + ' meses (' + (sinAvg/365).toFixed(2) + ' años)';
-            document.getElementById('info-sin-max').textContent = daysToMonths(sinMaxVal) + ' meses (' + (sinMaxVal/365).toFixed(2) + ' años)';
+            document.getElementById('stat-sin-min-val').textContent = daysToMonths(sinMinVal);
+            document.getElementById('stat-sin-min-sub').textContent = '(' + (sinMinVal/365).toFixed(2) + ' años)';
+            document.getElementById('stat-sin-avg-val').textContent = daysToMonths(sinAvg);
+            document.getElementById('stat-sin-avg-sub').textContent = '(' + (sinAvg/365).toFixed(2) + ' años)';
+            document.getElementById('stat-sin-max-val').textContent = daysToMonths(sinMaxVal);
+            document.getElementById('stat-sin-max-sub').textContent = '(' + (sinMaxVal/365).toFixed(2) + ' años)';
 
             // Show content, hide loader
             document.getElementById('loading').style.display = 'none';
             document.getElementById('stats-content').style.display = 'block';
-            document.getElementById('detalle-section').style.display = 'block';
-            document.getElementById('detalle-sin-section').style.display = 'block';
         })
         .catch(function(err) {
             document.getElementById('loading').textContent = 'Error al cargar los datos. ' + err.message;
