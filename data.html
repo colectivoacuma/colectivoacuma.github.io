@@ -221,6 +221,28 @@
                     <div class="stat-subtext" id="stat-sin-max-sub"></div>
                 </div>
             </div>
+
+            <h3 style="color: #0288d1; margin-top: 30px; margin-bottom: 15px;" id="fut-heading">Futurible</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Mínimo Espera</div>
+                    <div class="stat-value" id="stat-fut-min-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
+                    <div class="stat-subtext" id="stat-fut-min-sub"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Promedio de Espera</div>
+                    <div class="stat-value" id="stat-fut-avg-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
+                    <div class="stat-subtext" id="stat-fut-avg-sub"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Máximo Espera</div>
+                    <div class="stat-value" id="stat-fut-max-val"></div>
+                    <div class="stat-label" style="font-size: 1em; margin-top: 5px;">meses</div>
+                    <div class="stat-subtext" id="stat-fut-max-sub"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -258,6 +280,8 @@
             var total = 0;
             var withToma = [];
             var withoutToma = [];
+            var tomaDatesList = [];    // actual Date objects for completed tomas
+            var pendingEntries = [];   // {acredDate} for pending people
             var today = new Date();
             today.setHours(0,0,0,0);
             
@@ -278,10 +302,12 @@
                     if (dT) {
                         var days = Math.round((dT - dA) / (1000 * 60 * 60 * 24));
                         withToma.push(days);
+                        tomaDatesList.push(dT);
                     }
                 } else {
                     var daysToday = Math.round((today - dA) / (1000 * 60 * 60 * 24));
                     withoutToma.push(daysToday);
+                    pendingEntries.push({acredDate: dA});
                 }
             }
 
@@ -319,6 +345,42 @@
             document.getElementById('stat-sin-avg-sub').textContent = '(' + (sinAvg/365).toFixed(2) + ' años)';
             document.getElementById('stat-sin-max-val').textContent = daysToMonths(sinMaxVal);
             document.getElementById('stat-sin-max-sub').textContent = '(' + (sinMaxVal/365).toFixed(2) + ' años)';
+
+            // Futurible - project same toma dates shifting +1 year per cycle of tomaDatesList.length
+            // Sort toma dates by day-of-year (day+month pattern, ignore year)
+            var tomaSorted = tomaDatesList.slice().sort(function(a, b) {
+                var aDOY = a.getMonth() * 100 + a.getDate();
+                var bDOY = b.getMonth() * 100 + b.getDate();
+                return aDOY - bDOY;
+            });
+            // Sort pending people by acreditación date (earliest first = first in queue)
+            pendingEntries.sort(function(a, b) { return a.acredDate - b.acredDate; });
+
+            var cycleLen = tomaSorted.length;
+            var futWaitDays = [];
+            document.getElementById('fut-heading').textContent = 'Futurible (ritmo de 35 plazas de CU convocadas al año)';
+
+            for (var j = 0; j < pendingEntries.length; j++) {
+                var yearOffset = Math.floor(j / cycleLen) + 1;
+                var posInCycle = j % cycleLen;
+                var baseDate = tomaSorted[posInCycle];
+                // Projected toma: same day+month as baseDate, but yearOffset years later
+                var projYear = baseDate.getFullYear() + yearOffset;
+                var projToma = new Date(projYear, baseDate.getMonth(), baseDate.getDate());
+                var waitDays = Math.round((projToma - pendingEntries[j].acredDate) / (1000 * 60 * 60 * 24));
+                futWaitDays.push(waitDays);
+            }
+
+            var futMinDays = Math.min.apply(null, futWaitDays);
+            var futAvgDays = futWaitDays.reduce(function(a,b){return a+b;},0) / futWaitDays.length;
+            var futMaxDays = Math.max.apply(null, futWaitDays);
+
+            document.getElementById('stat-fut-min-val').textContent = daysToMonths(futMinDays);
+            document.getElementById('stat-fut-min-sub').textContent = '(' + (futMinDays/365).toFixed(2) + ' años)';
+            document.getElementById('stat-fut-avg-val').textContent = daysToMonths(futAvgDays);
+            document.getElementById('stat-fut-avg-sub').textContent = '(' + (futAvgDays/365).toFixed(2) + ' años)';
+            document.getElementById('stat-fut-max-val').textContent = daysToMonths(futMaxDays);
+            document.getElementById('stat-fut-max-sub').textContent = '(' + (futMaxDays/365).toFixed(2) + ' años)';
 
             // Show content, hide loader
             document.getElementById('loading').style.display = 'none';
